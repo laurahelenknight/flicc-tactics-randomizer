@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLICC Tactics Randomizer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inclusive Sans', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .filter-section {
+            margin-bottom: 20px;
+        }
+
+        .filter-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #4facfe;
+        }
+
+        .randomize-btn {
+            width: 100%;
+            padding: 15px 30px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .randomize-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(44, 62, 80, 0.3);
+            background: #34495e;
+        }
+
+        .randomize-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-container {
+            padding: 30px;
+            min-height: 400px;
+        }
+
+        .tactic-card {
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            margin-bottom: 20px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        /* Category-specific colors matching the card design */
+        .tactic-card.fake-experts {
+            background: #d32f2f; /* Red */
+        }
+
+        .tactic-card.logical-fallacies {
+            background: #f57c00; /* Orange */
+        }
+
+        .tactic-card.impossible-expectations {
+            background: #388e3c; /* Green */
+        }
+
+        .tactic-card.cherry-picking {
+            background: #1976d2; /* Blue */
+        }
+
+        .tactic-card.conspiracy-theories {
+            background: #7b1fa2; /* Purple */
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .technique-name {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .technique-icon {
+            width: 60px;
+            height: 60px;
+            filter: brightness(0) invert(1); /* Makes black icons white */
+            flex-shrink: 0;
+        }
+
+        .definition-section,
+        .example-section,
+        .questions-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: rgba(255,255,255,0.8);
+            margin-right: 10px;
+            border-radius: 2px;
+        }
+
+        .definition-text,
+        .example-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .questions-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .questions-list li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .questions-list li::before {
+            content: '?';
+            position: absolute;
+            left: 0;
+            background: rgba(255,255,255,0.8);
+            color: #f5576c;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .placeholder {
+            text-align: center;
+            color: #6c757d;
+            font-size: 1.2em;
+            margin-top: 100px;
+        }
+
+        .placeholder-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .stats {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .controls {
+                padding: 20px;
+            }
+            
+            .result-container {
+                padding: 20px;
+            }
+            
+            .technique-name {
+                font-size: 1.5em;
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .technique-icon {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 FLICC Tactics Randomizer</h1>
+            <p>Interactive tool for learning about misinformation techniques</p>
+        </div>
+
+        <div class="controls">
+            <div class="filter-section">
+                <label for="categoryFilter">Filter by Category (Optional):</label>
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">All Categories</option>
+                    <option value="Fake Experts">Fake Experts</option>
+                    <option value="Logical Fallacies">Logical Fallacies</option>
+                    <option value="Impossible Expectations">Impossible Expectations</option>
+                    <option value="Cherry Picking">Cherry Picking</option>
+                    <option value="Conspiracy Theories">Conspiracy Theories</option>
+                </select>
+            </div>
+            
+            <button id="randomizeBtn" class="randomize-btn">
+                🎲 Get Random FLICC Tactic
+            </button>
+        </div>
+
+        <div class="result-container">
+            <div id="result">
+                <div class="placeholder">
+                    <div class="placeholder-icon">🎯</div>
+                    <p>Click the button above to get a random FLICC tactic to analyze!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <p><strong>Dataset:</strong> 28 FLICC techniques across 5 categories | <strong>Source:</strong> Skeptical Science</p>
+        </div>
+    </div>
+
+    <script>
+        // Icon mapping for FLICC techniques from Wikimedia Commons
+        const iconMapping = {
+            // Fake Experts
+            "Bulk Fake Experts": "Bulk_Fake_Experts_Fallacy_Icon_Black.svg",
+            "Magnified Minority": "Magnified_Minority_Fallacy_Icon_Black.svg",
+            "Fake Debate": "Fake_Debate_Fallacy_Icon_Black.svg",
+            
+            // Logical Fallacies
+            "Ad Hominem": "Ad_Hominem_Fallacy_Icon_Black.svg",
+            "Misrepresentation": "Misrepresentation_Fallacy_Icon_Black.svg",
+            "Ambiguity": "Ambiguity_Fallacy_Icon_Black.svg",
+            "Oversimplification": "Oversimplification_Fallacy_Icon_Black.svg",
+            "False Analogy": "False_Analogy_Fallacy_Icon_Black.svg",
+            "Red Herring": "Red_Herring_Fallacy_Icon_Black.svg",
+            "Slippery Slope": "Slippery_Slope_Fallacy_Icon_Black.svg",
+            "Straw Man": "Straw_Man_Fallacy_Icon_Black.svg",
+            "False Choice": "False_Choice_Fallacy_Icon_Black.svg",
+            "Single Cause": "Single_Cause_Fallacy_Icon_Black.svg",
+            "Blowfish": "Blowfish_Fallacy_Icon_Black.svg",
+            
+            // Impossible Expectations
+            "Impossible Expectations": "Impossible_Expectations_Fallacy_Icon_Black.svg",
+            "Moving Goalposts": "Moving_Goalposts_Fallacy_Icon_Black.svg",
+            
+            // Cherry Picking
+            "Cherry Picking": "Cherry_Picking_Fallacy_Icon_Black.svg",
+            "Quote Mining": "Quote_Mining_Fallacy_Icon_Black.svg",
+            "Anecdote": "Anecdote_Fallacy_Icon_Black.svg",
+            "Slothful Induction": "Slothful_Induction_Fallacy_Icon_Black.svg",
+            
+            // Conspiracy Theories
+            "Conspiracy Theory": "Conspiracy_Theory_Fallacy_Icon_Black.svg",
+            "Contradictory": "Contradictory_Fallacy_Icon_Black.svg",
+            "Overriding Suspicion": "Overriding_Suspicion_Fallacy_Icon_Black.svg",
+            "Nefarious Intent": "Nefarious_Intent_Fallacy_Icon_Black.svg",
+            "Something Must Be Wrong": "Something_Must_Be_Wrong_Fallacy_Icon_Black.svg",
+            "Persecuted Victim": "Persecuted_Victim_Fallacy_Icon_Black.svg",
+            "Immune to Evidence": "Immune_to_Evidence_Fallacy_Icon_Black.svg",
+            "Re-interpreting Randomness": "Re-interpreting_Randomness_Fallacy_Icon_Black.svg"
+        };
+
+        function getIconUrl(techniqueName) {
+            const iconFilename = iconMapping[techniqueName];
+            if (iconFilename) {
+                return `./images/${iconFilename}`;
+            }
+            return null;
+        }
+
+        let currentTactic = null;
+        let usedTactics = [];
+
+        // FLICC Tactics Data
+        const fliccData = [
+            {
+                "Category": "Fake Experts",
+                "Technique": "Bulk Fake Experts",
+                "Definition": "Citing large numbers of seeming experts to argue that there is no scientific consensus.",
+                "Example": "\"There is no expert consensus because 31,487 Americans with a science degree signed a petition.\"",
+                "Guiding Questions": "• Are the cited experts actually qualified in the relevant field?\n• Is quantity of supporters being used to override quality of expertise?"
+            },
+            {
+                "Category": "Fake Experts",
+                "Technique": "Magnified Minority",
+                "Definition": "Magnifying the significance of a handful of dissenting scientists to cast doubt on overwhelming scientific consensus.",
+                "Example": "\"Sure, there's 97% consensus but Professor Smith disagrees.\"",
+                "Guiding Questions": "• Is the significance of minority views being exaggerated?\n• Is the extent of scientific agreement being downplayed?"
+            },
+            {
+                "Category": "Fake Experts",
+                "Technique": "Fake Debate",
+                "Definition": "Presenting science and pseudoscience in an adversarial format to give the false impression of an ongoing scientific debate.",
+                "Example": "\"Climate deniers should get equal coverage with climate scientists.\"",
+                "Guiding Questions": "• Is the text suggesting there are two equal sides to a settled scientific issue?\n• Are minority views being given undue weight compared to the scientific consensus?"
+            },
+            {
+                "Category": "Logical Fallacies",
+                "Technique": "Ad Hominem",
+                "Definition": "Attacking a person/group instead of addressing their arguments.",
+                "Example": "\"Climate science can't be trusted because climate scientists are biased.\"",
+                "Guiding Questions": "• Does the text attack the credibility of people rather than addressing their evidence or arguments?\n• Are personal characteristics or motivations being used to dismiss scientific findings?"
+            },
+            {
+                "Category": "Logical Fallacies",
+                "Technique": "Misrepresentation",
+                "Definition": "Misrepresenting a situation or an opponent's position to distort understanding.",
+                "Example": "\"They changed the name from 'global warming' to 'climate change' because warming stopped.\"",
+                "Guiding Questions": "• Is the opposing view being accurately represented?\n• Are scientific positions being distorted?"
+            },
+            {
+                "Category": "Logical Fallacies",
+                "Technique": "Ambiguity",
+                "Definition": "Using ambiguous language in order to lead to a misleading conclusion.",
+                "Example": "\"Thermometer readings have uncertainty which means we don't know whether global warming is happening.\"",
+                "Guiding Questions": "• Are technical uncertainties being exaggerated to cast doubt on well-established conclusions?\n• Is vague language being used to make the science seem less certain than it actually is?"
+            },
+            {
+                "Category": "Logical Fallacies",
+                "Technique": "Oversimplification",
+                "Definition": "Simplifying a situation in such a way as to distort understanding.",
+                "Example": "\"CO2 is plant food so burning fossil fuels will be good for plants.\"",
+                "Guiding Questions": "• Are complex systems being reduced to simple cause-and-effect?\n• Are important factors being ignored?"
+            },
+            {
+                "Category": "Logical Fallacies",
+                "Technique": "False Analogy",
+                "Definition": "Assuming that because two things are alike in some ways, they are alike in other respects.",
+                "Example": "\"Climate skeptics are like Galileo who overturned the scientific consensus.\"",
+                "Guiding Questions": "• Is the comparison relevant and appropriate?\n• Are important differences between the compared situations being ignored?"
+            },
+            {
+                "Category": "Logical Fallacies",
+                "Technique": "Red Herring",
+                "Definition": "Deliberately diverting attention to an irrelevant point to distract from a more important point.",
+                "Example": "\"CO2 is a trace gas so its warming effect is minimal.\"",
+                "Guiding Questions": "• Is the argument introducing irrelevant topics?\n• Are distractions being used to avoid main issues?"
+            },
+            {
+                "Category": "Logical Fallacies",
+                "Technique": "Slippery Slope",
+                "Definition": "Suggesting that one event will inevitably lead to a chain of negative events.",
+                "Example": "\"If we accept climate science, they'll ban all fossil fuels and destroy the economy.\"",
+                "Guiding Questions": "• Are extreme consequences being predicted without evidence?\n• Is the argument suggesting inevitable progression from one event to another?"
+            },
+            {
+                "Category": "Logical Fallacies",
+                "Technique": "Straw Man",
+                "Definition": "Misrepresenting or exaggerating an opponent's position to make it easier to attack.",
+                "Example": "\"Environmentalists want to destroy all industry and take us back to the stone age.\"",
+                "Guiding Questions": "• Is the opposing position being accurately represented?\n• Are extreme or simplified versions being used instead of the actual argument?"
+            },
+            {
+                "Category": "Logical Fallacies",
+                "Technique": "False Choice",
+                "Definition": "Presenting only two options when more exist.",
+                "Example": "\"We have to choose between economic growth and environmental protection.\"",
+                "Guiding Questions": "• Are there other options being ignored?\n• Is the situation being presented as more black-and-white than it actually is?"
+            },
+            {
+                "Category": "Logical Fallacies",
+                "Technique": "Single Cause",
+                "Definition": "Assuming a single cause or reason when there might be multiple causes.",
+                "Example": "\"Climate has always changed naturally, so current change must be natural too.\"",
+                "Guiding Questions": "• Are multiple potential causes being considered?\n• Is the argument oversimplifying complex causation?"
+            },
+            {
+                "Category": "Logical Fallacies",
+                "Technique": "Blowfish",
+                "Definition": "Focusing on an inconsequential detail to distract from the main argument.",
+                "Example": "\"How can we trust climate models when they can't even predict weather accurately?\"",
+                "Guiding Questions": "• Is a minor detail being used to distract from the main issue?\n• Are irrelevant comparisons being made?"
+            },
+            {
+                "Category": "Impossible Expectations",
+                "Technique": "Impossible Expectations",
+                "Definition": "Demanding unrealistic standards of certainty before acting on scientific evidence.",
+                "Example": "\"We need 100% certainty before we can act on climate change.\"",
+                "Guiding Questions": "• Are unrealistic levels of certainty being demanded?\n• Is the standard of proof impossibly high?"
+            },
+            {
+                "Category": "Impossible Expectations",
+                "Technique": "Moving Goalposts",
+                "Definition": "Changing the required evidence when previous evidence is provided.",
+                "Example": "\"The models were wrong about this detail, so we can't trust any climate science.\"",
+                "Guiding Questions": "• Are the standards of evidence changing when evidence is provided?\n• Is perfect prediction being required from imperfect systems?"
+            },
+            {
+                "Category": "Cherry Picking",
+                "Technique": "Cherry Picking",
+                "Definition": "Selecting only data that appears to support a preferred conclusion while ignoring data that contradicts it.",
+                "Example": "\"Global warming stopped in 1998\" (ignoring data after 1998).\"",
+                "Guiding Questions": "• Is only favorable data being selected?\n• Is contradictory evidence being ignored or dismissed?"
+            },
+            {
+                "Category": "Cherry Picking",
+                "Technique": "Quote Mining",
+                "Definition": "Taking quotes out of context to distort their original meaning.",
+                "Example": "\"Even the IPCC says warming may not be happening\" (partial quote).\"",
+                "Guiding Questions": "• Are quotes being taken out of their original context?\n• Would the full quote or source change the meaning?"
+            },
+            {
+                "Category": "Cherry Picking",
+                "Technique": "Anecdote",
+                "Definition": "Using personal experience or isolated examples to draw broader conclusions.",
+                "Example": "\"It snowed today, so global warming isn't real.\"",
+                "Guiding Questions": "• Are personal experiences being used to contradict broader patterns?\n• Is weather being confused with climate?"
+            },
+            {
+                "Category": "Cherry Picking",
+                "Technique": "Slothful Induction",
+                "Definition": "Ignoring relevant evidence and drawing conclusions from insufficient information.",
+                "Example": "\"Scientists have been wrong before, so they're probably wrong about climate change.\"",
+                "Guiding Questions": "• Is relevant evidence being ignored?\n• Are conclusions being drawn from insufficient information?"
+            },
+            {
+                "Category": "Conspiracy Theories",
+                "Technique": "Conspiracy Theory",
+                "Definition": "Proposing that secret groups are working together to hide the truth.",
+                "Example": "\"Climate change is a hoax perpetrated by scientists to get research funding.\"",
+                "Guiding Questions": "• Is the argument claiming secret coordination without evidence?\n• Would the proposed conspiracy require unrealistic levels of coordination?"
+            },
+            {
+                "Category": "Conspiracy Theories",
+                "Technique": "Contradictory",
+                "Definition": "Holding beliefs that contradict each other.",
+                "Example": "\"Climate isn't changing\" but also \"climate change is natural and beneficial.\"",
+                "Guiding Questions": "• Are contradictory explanations being offered?\n• Can both claims be true simultaneously?"
+            },
+            {
+                "Category": "Conspiracy Theories",
+                "Technique": "Overriding Suspicion",
+                "Definition": "Extreme suspicion preventing acceptance of any official account.",
+                "Example": "\"Any scientist who supports climate science must be part of the conspiracy.\"",
+                "Guiding Questions": "• Is suspicion preventing fair evaluation of evidence?\n• Are all official sources being dismissed automatically?"
+            },
+            {
+                "Category": "Conspiracy Theories",
+                "Technique": "Nefarious Intent",
+                "Definition": "Assuming that the actions of others are driven by malicious intent.",
+                "Example": "\"Scientists are deliberately exaggerating climate change to destroy capitalism.\"",
+                "Guiding Questions": "• Are malicious motives being assumed without evidence?\n• Could there be other explanations for the behavior?"
+            },
+            {
+                "Category": "Conspiracy Theories",
+                "Technique": "Something Must Be Wrong",
+                "Definition": "Believing that official accounts must be wrong, even without alternative explanations.",
+                "Example": "\"I don't know what's really happening with climate, but it's not what scientists say.\"",
+                "Guiding Questions": "• Is the official account being rejected without providing alternatives?\n• Is skepticism being applied selectively?"
+            },
+            {
+                "Category": "Conspiracy Theories",
+                "Technique": "Persecuted Victim",
+                "Definition": "Claiming that those who believe in the conspiracy are being persecuted for their beliefs.",
+                "Example": "\"Climate skeptics are being silenced by the climate establishment.\"",
+                "Guiding Questions": "• Is persecution being claimed without evidence?\n• Are legitimate criticism and persecution being confused?"
+            },
+            {
+                "Category": "Conspiracy Theories",
+                "Technique": "Immune to Evidence",
+                "Definition": "Rejecting all evidence that contradicts the conspiracy theory.",
+                "Example": "\"Any evidence supporting climate science must be fabricated or manipulated.\"",
+                "Guiding Questions": "• Is all contradictory evidence being dismissed automatically?\n• What evidence would be needed to change this position?"
+            },
+            {
+                "Category": "Conspiracy Theories",
+                "Technique": "Re-interpreting Randomness",
+                "Definition": "Interpreting random events as part of a pattern or conspiracy.",
+                "Example": "\"Three climate scientists died in one year - that can't be a coincidence.\"",
+                "Guiding Questions": "• Are random events being interpreted as meaningful patterns?\n• Is coincidence being ruled out without justification?"
+            }
+        ];
+
+        function getFilteredData() {
+            const selectedCategory = document.getElementById('categoryFilter').value;
+            if (!selectedCategory) {
+                return fliccData;
+            }
+            return fliccData.filter(tactic => tactic.Category === selectedCategory);
+        }
+
+        function getRandomTactic() {
+            const filteredData = getFilteredData();
+            
+            if (filteredData.length === 0) {
+                return null;
+            }
+
+            // If we've used all tactics in the current filter, reset
+            const availableTactics = filteredData.filter(tactic => 
+                !usedTactics.some(used => 
+                    used.Category === tactic.Category && used.Technique === tactic.Technique
+                )
+            );
+
+            let selectedTactic;
+            if (availableTactics.length === 0) {
+                // Reset if we've used all
+                usedTactics = [];
+                selectedTactic = filteredData[Math.floor(Math.random() * filteredData.length)];
+            } else {
+                selectedTactic = availableTactics[Math.floor(Math.random() * availableTactics.length)];
+            }
+
+            usedTactics.push(selectedTactic);
+            return selectedTactic;
+        }
+
+        function formatQuestions(questionsText) {
+            const questions = questionsText.split('\n').filter(q => q.trim().length > 0);
+            return questions.map(q => `<li>${q.replace('• ', '')}</li>`).join('');
+        }
+
+        function displayTactic(tactic) {
+            const resultDiv = document.getElementById('result');
+            
+            if (!tactic) {
+                resultDiv.innerHTML = `
+                    <div class="placeholder">
+                        <div class="placeholder-icon">❌</div>
+                        <p>No tactics found for the selected category.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Get category CSS class
+            const categoryClass = tactic.Category.toLowerCase().replace(/\s+/g, '-');
+            
+            // Get icon URL
+            const iconUrl = getIconUrl(tactic.Technique);
+            const iconHtml = iconUrl ? `<img src="${iconUrl}" alt="${tactic.Technique} icon" class="technique-icon">` : '';
+
+            resultDiv.innerHTML = `
+                <div class="tactic-card ${categoryClass}">
+                    <div class="category-badge">${tactic.Category}</div>
+                    <div class="technique-name">
+                        ${iconHtml}
+                        <span>${tactic.Technique}</span>
+                    </div>
+                    
+                    <div class="definition-section">
+                        <div class="section-title">Definition</div>
+                        <div class="definition-text">${tactic.Definition}</div>
+                    </div>
+                    
+                    <div class="example-section">
+                        <div class="section-title">Example</div>
+                        <div class="example-text">${tactic.Example}</div>
+                    </div>
+                    
+                    <div class="questions-section">
+                        <div class="section-title">Critical Reflection Questions</div>
+                        <ul class="questions-list">
+                            ${formatQuestions(tactic["Guiding Questions"])}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        function randomizeTactic() {
+            const tactic = getRandomTactic();
+            currentTactic = tactic;
+            displayTactic(tactic);
+        }
+
+        // Event listeners
+        document.getElementById('randomizeBtn').addEventListener('click', randomizeTactic);
+        
+        document.getElementById('categoryFilter').addEventListener('change', function() {
+            // Reset used tactics when filter changes
+            usedTactics = [];
+        });
+
+        // Initialize with placeholder
+        document.getElementById('result').innerHTML = `
+            <div class="placeholder">
+                <div class="placeholder-icon">🎯</div>
+                <p>Click the button above to get a random FLICC tactic to analyze!</p>
+            </div>
+        `;
+    </script>
+</body>
+</html>
