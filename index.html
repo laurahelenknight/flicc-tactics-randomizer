@@ -118,6 +118,7 @@
             animation: slideIn 0.5s ease-out;
             border: 2px solid #e0e0e0;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         /* Category-specific colors for badges, headings, and section borders */
@@ -218,30 +219,30 @@
         }
 
         .technique-name {
-            font-size: 3.5em;
+            font-size: 5.6em;
             font-weight: 700;
             margin-bottom: 30px;
             line-height: 1.1;
-            display: flex;
-            align-items: center;
-            gap: 20px;
             color: #333;
             text-align: left;
+            padding-right: 140px;
         }
 
         .technique-icon {
             width: 120px;
             height: 120px;
-            flex-shrink: 0;
+            position: absolute;
+            top: 20px;
+            right: 20px;
         }
 
         .definition-section,
         .example-section,
         .questions-section {
-            background: #f8f9fa;
-            border-radius: 10px;
+            background: transparent;
             padding: 20px;
-            margin-bottom: 15px;
+            padding-left: 25px;
+            margin-bottom: 20px;
             border-left: 4px solid #e0e0e0;
         }
 
@@ -335,15 +336,15 @@
             
             .technique-name {
                 font-size: 2.5em;
-                flex-direction: column;
-                gap: 15px;
                 margin-bottom: 25px;
-                align-items: flex-start;
+                padding-right: 100px;
             }
             
             .technique-icon {
                 width: 80px;
                 height: 80px;
+                top: 15px;
+                right: 15px;
             }
         }
     </style>
@@ -702,11 +703,9 @@
 
             resultDiv.innerHTML = `
                 <div class="tactic-card ${categoryClass}">
+                    ${iconHtml}
                     <div class="category-badge">${tactic.Category}</div>
-                    <div class="technique-name">
-                        ${iconHtml}
-                        <span>${tactic.Technique}</span>
-                    </div>
+                    <div class="technique-name">${tactic.Technique}</div>
                     
                     <div class="definition-section">
                         <div class="section-title">Definition</div>
