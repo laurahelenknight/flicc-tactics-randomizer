@@ -110,32 +110,90 @@
         }
 
         .tactic-card {
+            background: white;
             border-radius: 15px;
             padding: 25px;
-            color: white;
+            color: #333;
             margin-bottom: 20px;
             animation: slideIn 0.5s ease-out;
+            border: 2px solid #e0e0e0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
         }
 
-        /* Category-specific colors matching the card design */
-        .tactic-card.fake-experts {
-            background: #d32f2f; /* Red */
+        /* Category-specific colors for badges, headings, and section borders */
+        .tactic-card.fake-experts .category-badge {
+            background: #d32f2f;
+            color: white;
         }
 
-        .tactic-card.logical-fallacies {
-            background: #f57c00; /* Orange */
+        .tactic-card.fake-experts .section-title {
+            color: #d32f2f;
         }
 
-        .tactic-card.impossible-expectations {
-            background: #388e3c; /* Green */
+        .tactic-card.fake-experts .definition-section,
+        .tactic-card.fake-experts .example-section,
+        .tactic-card.fake-experts .questions-section {
+            border-left-color: #d32f2f;
         }
 
-        .tactic-card.cherry-picking {
-            background: #1976d2; /* Blue */
+        .tactic-card.logical-fallacies .category-badge {
+            background: #f57c00;
+            color: white;
         }
 
-        .tactic-card.conspiracy-theories {
-            background: #7b1fa2; /* Purple */
+        .tactic-card.logical-fallacies .section-title {
+            color: #f57c00;
+        }
+
+        .tactic-card.logical-fallacies .definition-section,
+        .tactic-card.logical-fallacies .example-section,
+        .tactic-card.logical-fallacies .questions-section {
+            border-left-color: #f57c00;
+        }
+
+        .tactic-card.impossible-expectations .category-badge {
+            background: #388e3c;
+            color: white;
+        }
+
+        .tactic-card.impossible-expectations .section-title {
+            color: #388e3c;
+        }
+
+        .tactic-card.impossible-expectations .definition-section,
+        .tactic-card.impossible-expectations .example-section,
+        .tactic-card.impossible-expectations .questions-section {
+            border-left-color: #388e3c;
+        }
+
+        .tactic-card.cherry-picking .category-badge {
+            background: #1976d2;
+            color: white;
+        }
+
+        .tactic-card.cherry-picking .section-title {
+            color: #1976d2;
+        }
+
+        .tactic-card.cherry-picking .definition-section,
+        .tactic-card.cherry-picking .example-section,
+        .tactic-card.cherry-picking .questions-section {
+            border-left-color: #1976d2;
+        }
+
+        .tactic-card.conspiracy-theories .category-badge {
+            background: #7b1fa2;
+            color: white;
+        }
+
+        .tactic-card.conspiracy-theories .section-title {
+            color: #7b1fa2;
+        }
+
+        .tactic-card.conspiracy-theories .definition-section,
+        .tactic-card.conspiracy-theories .example-section,
+        .tactic-card.conspiracy-theories .questions-section {
+            border-left-color: #7b1fa2;
         }
 
         @keyframes slideIn {
@@ -151,55 +209,47 @@
 
         .category-badge {
             display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 6px 15px;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 25px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 15px;
+            letter-spacing: 0.5px;
         }
 
         .technique-name {
-            font-size: 2.8em;
+            font-size: 5.6em;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             line-height: 1.1;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+            color: #333;
+            text-align: left;
         }
 
         .technique-icon {
-            width: 60px;
-            height: 60px;
-            filter: brightness(0) invert(1); /* Makes black icons white */
+            width: 120px;
+            height: 120px;
             flex-shrink: 0;
         }
 
         .definition-section,
         .example-section,
         .questions-section {
-            background: rgba(255,255,255,0.1);
+            background: #f8f9fa;
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 15px;
+            border-left: 4px solid #e0e0e0;
         }
 
         .section-title {
             font-size: 1.2em;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .section-title::before {
-            content: '';
-            width: 4px;
-            height: 20px;
-            background: rgba(255,255,255,0.8);
-            margin-right: 10px;
-            border-radius: 2px;
+            letter-spacing: 0.5px;
         }
 
         .definition-text,
@@ -211,20 +261,23 @@
         .questions-list {
             list-style: none;
             padding-left: 0;
+            font-size: 1.1em;
         }
 
         .questions-list li {
-            margin-bottom: 8px;
-            padding-left: 20px;
+            margin-bottom: 12px;
+            padding-left: 25px;
             position: relative;
+            line-height: 1.6;
         }
 
         .questions-list li::before {
             content: '?';
             position: absolute;
             left: 0;
-            background: rgba(255,255,255,0.8);
-            color: #f5576c;
+            top: 2px;
+            background: #333;
+            color: white;
             width: 18px;
             height: 18px;
             border-radius: 50%;
@@ -281,15 +334,16 @@
             }
             
             .technique-name {
-                font-size: 1.5em;
+                font-size: 2.5em;
                 flex-direction: column;
-                text-align: center;
-                gap: 10px;
+                gap: 15px;
+                margin-bottom: 25px;
+                align-items: flex-start;
             }
             
             .technique-icon {
-                width: 50px;
-                height: 50px;
+                width: 80px;
+                height: 80px;
             }
         }
     </style>
@@ -297,8 +351,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Explore FLICC Tactics</h1>
-            <p>Interactive tool for learning about the techniques of science denial</p>
+            <h1>🎯 FLICC Tactics Randomizer</h1>
+            <p>Interactive tool for learning about misinformation techniques</p>
         </div>
 
         <div class="controls">
@@ -660,12 +714,12 @@
                     </div>
                     
                     <div class="example-section">
-                        <div class="section-title">Example</div>
+                        <div class="section-title">What it sounds like...</div>
                         <div class="example-text">${tactic.Example}</div>
                     </div>
                     
                     <div class="questions-section">
-                        <div class="section-title">Critical Reflection Questions</div>
+                        <div class="section-title">How to spot it</div>
                         <ul class="questions-list">
                             ${formatQuestions(tactic["Guiding Questions"])}
                         </ul>
