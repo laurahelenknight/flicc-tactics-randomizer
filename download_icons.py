@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-FLICC Icons Download Script
-Downloads all FLICC technique icons from Wikimedia Commons
+CORRECTED FLICC Icons Download Script
+Downloads all FLICC technique icons from Wikimedia Commons with correct filenames
 """
 
 import os
@@ -54,13 +54,13 @@ def download_icon(filename, max_retries=3):
 
 def main():
     """Main download function"""
-    print("🎯 FLICC Icons Downloader")
+    print("🎯 CORRECTED FLICC Icons Downloader")
     print("=" * 40)
     
     # Create images directory
     create_images_directory()
     
-    # Complete list of FLICC icons
+    # CORRECTED list of FLICC icons with accurate filenames
     icons = [
         # Fake Experts
         "Bulk_Fake_Experts_Fallacy_Icon_Black.svg",
@@ -73,7 +73,7 @@ def main():
         "Ambiguity_Fallacy_Icon_Black.svg",
         "Oversimplification_Fallacy_Icon_Black.svg",
         "False_Analogy_Fallacy_Icon_Black.svg",
-        "Red_Herring_Fallacy_Icon_Black.svg",
+        "Red_Herring_Fallacy_Black.svg",  # Note: Missing "Icon" in this filename
         "Slippery_Slope_Fallacy_Icon_Black.svg",
         "Straw_Man_Fallacy_Icon_Black.svg",
         "False_Choice_Fallacy_Icon_Black.svg",
@@ -95,13 +95,14 @@ def main():
         "Contradictory_Fallacy_Icon_Black.svg",
         "Overriding_Suspicion_Fallacy_Icon_Black.svg",
         "Nefarious_Intent_Fallacy_Icon_Black.svg",
-        "Something_Must_Be_Wrong_Fallacy_Icon_Black.svg",
+        "Something_Wrong_Fallacy_Icon_Black.svg",  # Corrected: shorter name
         "Persecuted_Victim_Fallacy_Icon_Black.svg",
         "Immune_to_Evidence_Fallacy_Icon_Black.svg",
-        "Re-interpreting_Randomness_Fallacy_Icon_Black.svg",
+        "Reinterpreting_Randomness_Fallacy_Icon_Black.svg",  # Corrected: no hyphen
     ]
     
     print(f"Downloading {len(icons)} FLICC icons from Wikimedia Commons...")
+    print("(Using corrected filenames)")
     print()
     
     successful_downloads = 0
@@ -129,13 +130,17 @@ def main():
         for failed in failed_downloads:
             print(f"     - {failed}")
         print()
-        print("💡 Tip: You can run this script again to retry failed downloads")
+        print("💡 Note: Some icons might not exist on Wikimedia Commons")
+        print("   The tool will work fine without them (text-only display)")
     else:
         print("   All icons downloaded successfully! 🎉")
     
     print()
     print("📁 Icons saved to: ./images/")
     print("🚀 Your FLICC randomizer is ready to use!")
+    print()
+    print("⚠️  IMPORTANT: After downloading, update your HTML file")
+    print("   with the corrected icon mapping provided separately.")
 
 if __name__ == "__main__":
     main()
